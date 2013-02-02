@@ -31,7 +31,7 @@ if __name__ == "__main__":
     alt=np.array([ar[-1] for ar in sonde_text])
     spd=np.array([ar[10] for ar in sonde_text])
     dir=np.array([ar[11] for ar in sonde_text])
-    levs=np.linspace(50,alt.max()-3000.0,100)
+    levs=np.linspace(50,alt.max()-1000.0,900)
     good=np.where(alt > 20.0)	
     alt_qc=alt[good]; spd_qc=spd[good]; dir_qc=dir[good]
     spd_i=scipy.interpolate.interp1d(alt_qc, spd_qc)(levs)
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     
     target = netCDF4.num2date(myradar.time['data'][0], myradar.time['units'])
     if rslobj:
-        deal_obj = dealias.dealiaser(myradar, levs[2::], 0.0*spd_i[2::]+ 2.0,
-                                     0.0*dir_i[2::]  +90.0 , target, refl='CZ', vel='VR', rsl_radar=rslobj)
+        deal_obj = dealias.dealiaser(myradar, levs[2::], spd_i[2::],
+                                     dir_i[2::]   , target, refl='CZ', vel='VR', rsl_radar=rslobj)
     else:
         deal_obj = dealias.dealiaser(myradar, levs[2::], spd_i[2::],
                                      dir_i[2::], target, refl='CZ', vel='VR')
